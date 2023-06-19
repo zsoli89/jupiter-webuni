@@ -4,6 +4,7 @@ import hu.webuni.spring.jupiterwebuni.model.student.Student;
 import hu.webuni.spring.jupiterwebuni.model.student.StudentDto;
 import hu.webuni.spring.jupiterwebuni.model.student.StudentMapper;
 import hu.webuni.spring.jupiterwebuni.repository.StudentRepository;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class StudentService {
 
@@ -21,16 +23,9 @@ public class StudentService {
     private final StudentRepository repository;
     private final StudentMapper mapper;
 
-    public StudentService(
-            StudentRepository repository, StudentMapper mapper
-    ) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
-
     public List<StudentDto> findAll() {
         List<StudentDto> studentDtoList = repository.findAll().stream().map(mapper::entityToDto).toList();
-        logger.info("Find all student list size: %s".formatted(studentDtoList.size()));
+        logger.info("Find all student list size: {}", studentDtoList.size());
         return studentDtoList;
     }
 
@@ -43,8 +38,9 @@ public class StudentService {
         return mapper.entityToDto(entity.get());
     }
 
+    @Transactional
     public StudentDto create(StudentDto dto) {
-        boolean isExist = repository.isExistByNameAndBirthdate(dto.getName(), dto.getBirthdate());
+        boolean isExist = repository.isExistStudentByNameAndBirthdate(dto.getName(), dto.getBirthdate());
         if (isExist) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
@@ -53,6 +49,7 @@ public class StudentService {
         return mapper.entityToDto(savedEntity);
     }
 
+    @Transactional
     public StudentDto update(StudentDto dto) {
         Optional<Student> entity = repository.findById(dto.getId());
         if (entity.isEmpty())

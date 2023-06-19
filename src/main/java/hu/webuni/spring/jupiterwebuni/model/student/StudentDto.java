@@ -1,13 +1,11 @@
 package hu.webuni.spring.jupiterwebuni.model.student;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 public class StudentDto {
 
     private Long id;

@@ -18,6 +18,7 @@ public class JupiterWebuniApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        initDbService.deleteDb();
         initDbService.addInitData();
     }
 }

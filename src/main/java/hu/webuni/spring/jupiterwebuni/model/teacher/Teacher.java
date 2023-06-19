@@ -1,12 +1,11 @@
 package hu.webuni.spring.jupiterwebuni.model.teacher;
 
+import hu.webuni.spring.jupiterwebuni.model.course.Course;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,8 +18,11 @@ public class Teacher {
     @Id
     @GeneratedValue
     @EqualsAndHashCode.Include()
+    @ToString.Include
     private Long id;
     private String name;
     private LocalDate birthdate;
+    @ManyToMany(mappedBy = "teachers")
+    private Set<Course> courses;
 
 }

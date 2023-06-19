@@ -11,6 +11,6 @@ import java.time.LocalDate;
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN TRUE ELSE FALSE END FROM Student s WHERE s.name=?1 AND s.birthdate=?2")
-    boolean isExistByNameAndBirthdate(String name, LocalDate birthdate);
+    boolean isExistStudentByNameAndBirthdate(String name, LocalDate birthdate);
 
 }
