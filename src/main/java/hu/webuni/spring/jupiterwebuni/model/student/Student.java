@@ -14,7 +14,8 @@ import java.util.Set;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Data   //getter setter eqals hashcode
+@Cacheable
+@Data   //getter setter equals hashcode
 public class Student {
 
     @Id
