@@ -198,6 +198,31 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CourseDto'
+  '/api/courses/{id}/versions':
+    get:
+      tags:
+        - course-controller
+      operationId: getVersionAt
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: at
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDto'
   '/api/teacher/delete/{id}':
     delete:
       tags:
@@ -228,6 +253,27 @@ paths:
       responses:
         '200':
           description: OK
+  '/api/courses/history/{id}':
+    get:
+      tags:
+        - course-controller
+      operationId: getHistory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoryDataCourseDto'
 components:
   schemas:
     TeacherDto:
@@ -277,3 +323,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TeacherDto'
+    HistoryDataCourseDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CourseDto'
+        revType:
+          type: string
+          enum:
+            - ADD
+            - MOD
+            - DEL
+        revision:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time

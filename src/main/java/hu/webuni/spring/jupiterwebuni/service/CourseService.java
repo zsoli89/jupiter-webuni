@@ -4,8 +4,16 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import hu.webuni.spring.jupiterwebuni.model.course.Course;
 import hu.webuni.spring.jupiterwebuni.model.course.QCourse;
+import hu.webuni.spring.jupiterwebuni.model.historydata.HistoryData;
 import hu.webuni.spring.jupiterwebuni.repository.CourseRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditProperty;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +21,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @AllArgsConstructor
 @Service
 public class CourseService {
+
+    @PersistenceContext
+    private EntityManager em;
 
     private final CourseRepository courseRepository;
 
@@ -45,4 +57,56 @@ public class CourseService {
         courses = courseRepository.findAll(courseIdInPredicate, "Course.teachers", pageable.getSort());
         return courses;
     }
+
+    @Transactional
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public List<HistoryData<Course>> getHistoryById(int id) {
+
+        List resultList = AuditReaderFactory.get(em)
+                .createQuery()
+                .forRevisionsOfEntity(Course.class, false, true)
+                .add(AuditEntity.property("id").eq(id))
+                .getResultList().stream().map(o -> {
+                    Object[] objArray = (Object[]) o;
+
+                    DefaultRevisionEntity defaultRevisionEntity = (DefaultRevisionEntity) objArray[1];
+                    RevisionType revType = (RevisionType) objArray[2];
+
+                    Course course = (Course) objArray[0];
+                    course.getStudents().size();
+                    course.getTeachers().size();
+
+                    HistoryData<Course> historyData =
+                            new HistoryData<>(
+                                    course, revType,
+                                    defaultRevisionEntity.getId(), defaultRevisionEntity.getRevisionDate());
+                    return historyData;
+                }).toList();
+        return resultList;
+    }
+
+    @Transactional
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public Course getVersionAt(int id, OffsetDateTime when) {
+        long epochMillis = when.toInstant().toEpochMilli();
+        AuditProperty<Object> timestampProperty = AuditEntity.revisionProperty("timestamp");
+        List resultList = AuditReaderFactory.get(em)
+                .createQuery()
+                .forRevisionsOfEntity(Course.class, true, false)
+                .add(AuditEntity.property("id").eq(id))
+                .add(timestampProperty.le(epochMillis))
+                .addOrder(timestampProperty.desc())
+                .setMaxResults(1)
+                .getResultList();
+
+        if(!resultList.isEmpty()) {
+            Course course = (Course) resultList.get(0);
+            course.getStudents().size();
+            course.getTeachers().size();
+            return course;
+        }
+
+        return null;
+    }
+
 }

@@ -3,10 +3,13 @@ package hu.webuni.spring.jupiterwebuni.controller;
 import com.querydsl.core.types.Predicate;
 import hu.webuni.jupiterwebuni.api.CourseControllerApi;
 import hu.webuni.jupiterwebuni.api.model.CourseDto;
+import hu.webuni.jupiterwebuni.api.model.HistoryDataCourseDto;
 import hu.webuni.spring.jupiterwebuni.model.course.Course;
 import hu.webuni.spring.jupiterwebuni.model.course.CourseMapper;
 import hu.webuni.spring.jupiterwebuni.repository.CourseRepository;
 import hu.webuni.spring.jupiterwebuni.service.CourseService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -15,6 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,4 +66,21 @@ public class CourseController implements CourseControllerApi {
         }
     }
 
+    @Override
+    public ResponseEntity<List<HistoryDataCourseDto>> getHistory(Integer id) {
+        return ResponseEntity.ok(
+                courseMapper.coursesHistoryToHistoryDataCourseDtos(courseService.getHistoryById(id))
+        );
+    }
+
+    @Override
+    public ResponseEntity<CourseDto> getVersionAt(Integer id, @NotNull @Valid LocalDateTime at) {
+        ZoneOffset offset = ZoneOffset.UTC;
+        OffsetDateTime odt = at.atOffset(offset);
+        return ResponseEntity.ok(
+                courseMapper.courseToDto(
+                        courseService.getVersionAt(id, odt)
+                )
+        );
+    }
 }
