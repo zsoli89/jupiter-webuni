@@ -3,7 +3,7 @@ package hu.webuni.spring.jupiterwebuni.model.teacher;
 import hu.webuni.spring.jupiterwebuni.model.course.Course;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 

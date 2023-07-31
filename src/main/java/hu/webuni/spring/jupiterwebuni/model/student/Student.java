@@ -3,7 +3,7 @@ package hu.webuni.spring.jupiterwebuni.model.student;
 import hu.webuni.spring.jupiterwebuni.model.course.Course;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -19,7 +19,7 @@ import java.util.Set;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @EqualsAndHashCode.Include()
     @ToString.Include
     private Long id;

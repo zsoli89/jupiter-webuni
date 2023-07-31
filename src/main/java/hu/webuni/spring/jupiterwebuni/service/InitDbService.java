@@ -1,14 +1,8 @@
 package hu.webuni.spring.jupiterwebuni.service;
 
 import hu.webuni.spring.jupiterwebuni.model.course.Course;
-import hu.webuni.spring.jupiterwebuni.model.course.CourseDto;
-import hu.webuni.spring.jupiterwebuni.model.course.CourseMapper;
 import hu.webuni.spring.jupiterwebuni.model.student.Student;
-import hu.webuni.spring.jupiterwebuni.model.student.StudentDto;
-import hu.webuni.spring.jupiterwebuni.model.student.StudentMapper;
 import hu.webuni.spring.jupiterwebuni.model.teacher.Teacher;
-import hu.webuni.spring.jupiterwebuni.model.teacher.TeacherDto;
-import hu.webuni.spring.jupiterwebuni.model.teacher.TeacherMapper;
 import hu.webuni.spring.jupiterwebuni.repository.CourseRepository;
 import hu.webuni.spring.jupiterwebuni.repository.StudentRepository;
 import hu.webuni.spring.jupiterwebuni.repository.TeacherRepository;
@@ -20,7 +14,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -39,21 +32,9 @@ public class InitDbService {
 
     @Transactional
     public void addInitData() {
-        Student student1 = studentRepository.save(Student.builder()
-                .birthdate(LocalDate.of(1990, 9, 9))
-                .name("Kerekes Ivó")
-                .semester(2L)
-                .build());
-        Student student2 = studentRepository.save(Student.builder()
-                .birthdate(LocalDate.of(1991, 4, 3))
-                .name("Sipos Armandó")
-                .semester(1L)
-                .build());
-        Student student3 = studentRepository.save(Student.builder()
-                .birthdate(LocalDate.of(1991, 8, 2))
-                .name("Olajos Seherezádé")
-                .semester(1L)
-                .build());
+        Student student1 = createStudent("Kerekes Ivó", LocalDate.of(1990, 9, 9), 2L);
+        Student student2 = createStudent("Sipos Armandó", LocalDate.of(1991, 4, 3), 1L);
+        Student student3 = createStudent("Olajos Seherezádé", LocalDate.of(1991, 8, 2), 1L);
 
         Teacher teacher1 = createTeacher("teacher1", LocalDate.of(2000,10,10));
         Teacher teacher2 = createTeacher("teacher2", LocalDate.of(2000,10,10));

@@ -1,14 +1,12 @@
 package hu.webuni.spring.jupiterwebuni.controller;
 
-import hu.webuni.spring.jupiterwebuni.model.student.StudentDto;
-import hu.webuni.spring.jupiterwebuni.model.teacher.Teacher;
 import hu.webuni.spring.jupiterwebuni.model.teacher.TeacherDto;
 import hu.webuni.spring.jupiterwebuni.service.TeacherService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor

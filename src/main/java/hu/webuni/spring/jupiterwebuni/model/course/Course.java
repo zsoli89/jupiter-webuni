@@ -4,7 +4,7 @@ import hu.webuni.spring.jupiterwebuni.model.student.Student;
 import hu.webuni.spring.jupiterwebuni.model.teacher.Teacher;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
