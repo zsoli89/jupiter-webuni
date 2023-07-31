@@ -1,49 +1,46 @@
 package hu.webuni.spring.jupiterwebuni.controller;
 
-import hu.webuni.spring.jupiterwebuni.model.student.StudentDto;
-import hu.webuni.spring.jupiterwebuni.service.StudentService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import hu.webuni.jupiterwebuni.api.StudentControllerApi;
+import hu.webuni.jupiterwebuni.api.model.StudentDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.NativeWebRequest;
 
-import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("api/student")
-public class StudentController {
+public class StudentController implements StudentControllerApi {
 
-    private final StudentService service;
-
-    @GetMapping("/find/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public StudentDto findById(@PathVariable Long id) {
-        return service.findById(id);
+    @Override
+    public Optional<NativeWebRequest> getRequest() {
+        return StudentControllerApi.super.getRequest();
     }
 
-    @GetMapping("/findall")
-    @ResponseStatus(HttpStatus.OK)
-    public List<StudentDto> findAll() {
-        return service.findAll();
+    @Override
+    public ResponseEntity<StudentDto> create1(StudentDto studentDto) {
+        return StudentControllerApi.super.create1(studentDto);
     }
 
-    @PostMapping("/create")
-    @ResponseStatus(HttpStatus.OK)
-    public StudentDto create(@Valid @RequestBody StudentDto dto) {
-        return service.create(dto);
+    @Override
+    public ResponseEntity<Void> delete1(Long id) {
+        return StudentControllerApi.super.delete1(id);
     }
 
-    @PutMapping("/update")
-    @ResponseStatus(HttpStatus.OK)
-    public StudentDto update(@RequestBody StudentDto dto) {
-        return service.update(dto);
+    @Override
+    public ResponseEntity<List<StudentDto>> findAll1() {
+        return StudentControllerApi.super.findAll1();
     }
 
-    @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    @Override
+    public ResponseEntity<StudentDto> findById1(Long id) {
+        return StudentControllerApi.super.findById1(id);
     }
 
+    @Override
+    public ResponseEntity<StudentDto> update1(StudentDto studentDto) {
+        return StudentControllerApi.super.update1(studentDto);
+    }
 }

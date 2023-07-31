@@ -1,7 +1,7 @@
 package hu.webuni.spring.jupiterwebuni.service;
 
+import hu.webuni.jupiterwebuni.api.model.TeacherDto;
 import hu.webuni.spring.jupiterwebuni.model.teacher.Teacher;
-import hu.webuni.spring.jupiterwebuni.model.teacher.TeacherDto;
 import hu.webuni.spring.jupiterwebuni.model.teacher.TeacherMapper;
 import hu.webuni.spring.jupiterwebuni.repository.TeacherRepository;
 import lombok.AllArgsConstructor;

@@ -128,7 +128,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 $ref: '#/components/schemas/TeacherDto'
   /api/student/findall:
@@ -140,7 +140,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 type: array
                 items:
@@ -161,7 +161,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 $ref: '#/components/schemas/StudentDto'
   /api/courses/search:
@@ -170,26 +170,30 @@ paths:
         - course-controller
       operationId: searchCourses
       parameters:
-        - name: predicate
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/Predicate'
         - name: full
           in: query
           required: false
           schema:
             type: boolean
-        - name: pageable
+        - schema:
+            type: integer
           in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/Pageable'
+          name: page
+        - schema:
+            type: integer
+          in: query
+          name: size
+        - schema:
+            type: array
+            items:
+              type: string
+          in: query
+          name: sort
       responses:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 type: array
                 items:
@@ -273,20 +277,3 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TeacherDto'
-    Predicate:
-      type: object
-    Pageable:
-      type: object
-      properties:
-        page:
-          minimum: 0
-          type: integer
-          format: int32
-        size:
-          minimum: 1
-          type: integer
-          format: int32
-        sort:
-          type: array
-          items:
-            type: string

@@ -9,6 +9,7 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.stereotype.Repository;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,6 +24,7 @@ public interface CourseRepository extends
 
         bindings.bind(course.name).first((path, value) -> path.startsWithIgnoreCase(value));
         bindings.bind(course.teachers.any().name).first((path, value) -> path.startsWithIgnoreCase(value));
+        bindings.bind(course.students.any().name).first((path, value) -> path.startsWithIgnoreCase(value));
 
         bindings.bind(course.students.any().semester).all((path, values) -> {
             if(values.size() != 2)
@@ -50,4 +52,6 @@ public interface CourseRepository extends
 //    @Override
 //    @EntityGraph(attributePaths = {"teachers", "students"})
 //    Iterable<Course> findAll(Predicate predicate);
+
+    List<Course> findByName(String name);
 }

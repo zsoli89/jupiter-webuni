@@ -5,8 +5,11 @@ import hu.webuni.spring.jupiterwebuni.model.teacher.Teacher;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
+
 import java.util.Set;
 
+@Audited
 @Entity
 @Data
 @NoArgsConstructor

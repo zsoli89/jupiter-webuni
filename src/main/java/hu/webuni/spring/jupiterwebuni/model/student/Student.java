@@ -4,9 +4,12 @@ import hu.webuni.spring.jupiterwebuni.model.course.Course;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
+
 import java.time.LocalDate;
 import java.util.Set;
 
+@Audited
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,6 +30,8 @@ public class Student {
     private String name;
     private LocalDate birthdate;
     private Long semester;
+    private Integer eduId;
+    private Integer numFreeSemesters;
     @ManyToMany(mappedBy = "students")
     private Set<Course> courses;
 }

@@ -1,5 +1,6 @@
 package hu.webuni.spring.jupiterwebuni.model.course;
 
+import hu.webuni.jupiterwebuni.api.model.CourseDto;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

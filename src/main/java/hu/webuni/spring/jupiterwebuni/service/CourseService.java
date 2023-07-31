@@ -6,6 +6,7 @@ import hu.webuni.spring.jupiterwebuni.model.course.Course;
 import hu.webuni.spring.jupiterwebuni.model.course.QCourse;
 import hu.webuni.spring.jupiterwebuni.repository.CourseRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,6 +33,7 @@ public class CourseService {
 //    először lapozásos alapentitásokat megkeresni utána befetchelni a kapcsolatokat - bizonyos adatmennyiség felett érezhető
 //    az optimalizálás
     @Transactional
+    @Cacheable("courseSearchResults")
     public List<Course> searchCourses(Predicate predicate, Pageable pageable) {
 //      itt még rendezve vannak a kurzusok
         Page<Course> coursePage = courseRepository.findAll(predicate, pageable);
