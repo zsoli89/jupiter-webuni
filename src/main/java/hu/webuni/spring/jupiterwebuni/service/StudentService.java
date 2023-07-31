@@ -4,20 +4,30 @@ import hu.webuni.jupiterwebuni.api.model.StudentDto;
 import hu.webuni.spring.jupiterwebuni.model.student.Student;
 import hu.webuni.spring.jupiterwebuni.model.student.StudentMapper;
 import hu.webuni.spring.jupiterwebuni.repository.StudentRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 @Service
 public class StudentService {
@@ -26,6 +36,19 @@ public class StudentService {
     private final StudentRepository repository;
     private final StudentMapper mapper;
     private final CentralEducationService centralEducationService;
+
+    @Value("${jupiterwebuni.content.profilePics}")
+    private String profilePicsFolder;
+
+    @PostConstruct
+    public void init() {
+        try {
+            Files.createDirectories(Path.of(profilePicsFolder));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
     public List<StudentDto> findAll() {
         List<StudentDto> studentDtoList = repository.findAll().stream().map(mapper::entityToDto).toList();
@@ -94,4 +117,25 @@ public class StudentService {
         });
     }
 
+    private Path getProfilePicPathForStudent(Integer id) {
+        return Paths.get(profilePicsFolder, id.toString() + ".jpg");
+    }
+
+    public Resource getProfilePicture(Integer studentId) {
+        FileSystemResource fileSystemResource = new FileSystemResource(getProfilePicPathForStudent(studentId));
+        if(!fileSystemResource.exists())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return fileSystemResource;
+    }
+
+    public void saveProfilePicture(Integer id, InputStream is) {
+        if(!repository.existsById(Long.valueOf(id)))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        try {
+            Files.copy(is, getProfilePicPathForStudent(id), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 }
