@@ -1,0 +1,292 @@
+openapi: 3.0.1
+x-stoplight:
+  id: regqbjj23tvoc
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: 'http://localhost:8080'
+    description: Generated server url
+paths:
+  /api/teacher/update:
+    put:
+      tags:
+        - teacher-controller
+      operationId: update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherDto'
+  /api/student/update:
+    put:
+      tags:
+        - student-controller
+      operationId: update_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDto'
+  /api/teacher/create:
+    post:
+      tags:
+        - teacher-controller
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherDto'
+  /api/student/create:
+    post:
+      tags:
+        - student-controller
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDto'
+  /api/courses:
+    post:
+      tags:
+        - course-controller
+      operationId: createcourse
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDto'
+  /api/teacher/findall:
+    get:
+      tags:
+        - teacher-controller
+      operationId: findAll
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeacherDto'
+  '/api/teacher/find/{id}':
+    get:
+      tags:
+        - teacher-controller
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/TeacherDto'
+  /api/student/findall:
+    get:
+      tags:
+        - student-controller
+      operationId: findAll_1
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentDto'
+  '/api/student/find/{id}':
+    get:
+      tags:
+        - student-controller
+      operationId: findById_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/StudentDto'
+  /api/courses/search:
+    get:
+      tags:
+        - course-controller
+      operationId: searchCourses
+      parameters:
+        - name: predicate
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Predicate'
+        - name: full
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseDto'
+  '/api/teacher/delete/{id}':
+    delete:
+      tags:
+        - teacher-controller
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+  '/api/student/delete/{id}':
+    delete:
+      tags:
+        - student-controller
+      operationId: delete_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    TeacherDto:
+      required:
+        - birthdate
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        birthdate:
+          type: string
+          format: date
+    StudentDto:
+      required:
+        - birthdate
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        semester:
+          type: integer
+          format: int64
+    CourseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentDto'
+        teachers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeacherDto'
+    Predicate:
+      type: object
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            type: string
