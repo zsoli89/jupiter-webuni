@@ -14,10 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -34,6 +38,7 @@ public class CourseController implements CourseControllerApi {
     private final CourseMapper courseMapper;
     private final NativeWebRequest request;
     private final MethodArgumentResolverHelper resolverHelper;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Override
     public Optional<NativeWebRequest> getRequest() {
@@ -82,5 +87,15 @@ public class CourseController implements CourseControllerApi {
                         courseService.getVersionAt(id, odt)
                 )
         );
+    }
+
+    @Override
+    public ResponseEntity<Void> cancelLesson(Integer courseId, LocalDate day) {
+        Course course = courseRepository.findById(Long.valueOf(courseId))
+                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        simpMessagingTemplate.convertAndSend("/topic/courseChat/" + course.getId(),
+                String.format("A {%s} kurzus {%s} napon elmarad.", course.getName(), day)
+        );
+        return ResponseEntity.ok().build();
     }
 }

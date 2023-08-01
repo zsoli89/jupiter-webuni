@@ -1,5 +1,7 @@
 package hu.webuni.spring.jupiterwebuni.model.course;
 
+import hu.webuni.spring.jupiterwebuni.model.Semester;
+import hu.webuni.spring.jupiterwebuni.model.TimeTableItem;
 import hu.webuni.spring.jupiterwebuni.model.student.Student;
 import hu.webuni.spring.jupiterwebuni.model.teacher.Teacher;
 import lombok.*;
@@ -7,6 +9,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Audited
@@ -18,11 +21,11 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @NamedEntityGraph(
-        name="Course.students",
+        name = "Course.students",
         attributeNodes = @NamedAttributeNode("students")
 )
 @NamedEntityGraph(
-        name="Course.teachers",
+        name = "Course.teachers",
         attributeNodes = @NamedAttributeNode("teachers")
 )
 public class Course {
@@ -38,7 +41,18 @@ public class Course {
     private Set<Student> students;
     @ManyToMany
     private Set<Teacher> teachers;
-//    manytomany listtel, ha módosítanánk a listát, minden egyes db-be szinkronkor kitörli az összes meglévőt és újra
+    //    manytomany listtel, ha módosítanánk a listát, minden egyes db-be szinkronkor kitörli az összes meglévőt és újra
 //    beszúrja a most aktuálisat
 //    ha rendezés kell in-memory, egyébként szinte mindig Set manytomanykor
+    @OneToMany(mappedBy = "course")
+    private Set<TimeTableItem> timeTableItems;
+
+    private Semester semester;
+
+    public void addTimeTableItem(TimeTableItem timeTableItem) {
+        timeTableItem.setCourse(this);
+        if (this.timeTableItems == null)
+            this.timeTableItems = new HashSet<>();
+        this.timeTableItems.add(timeTableItem);
+    }
 }
