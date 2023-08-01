@@ -1,8 +1,10 @@
 package hu.webuni.spring.jupiterwebuni.repository;
 
 import hu.webuni.spring.jupiterwebuni.model.course.Course;
+import hu.webuni.spring.jupiterwebuni.model.course.CourseStat;
 import hu.webuni.spring.jupiterwebuni.model.course.QCourse;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -54,4 +56,9 @@ public interface CourseRepository extends
 //    Iterable<Course> findAll(Predicate predicate);
 
     List<Course> findByName(String name);
+
+    @Query("SELECT c.id as courseId, c.name as courseName, AVG(s.semester) as averageSemesterOfStudents "
+            + "FROM Course c LEFT JOIN c.students s "
+            + "GROUP BY c")
+    List<CourseStat> getCourseStats();
 }

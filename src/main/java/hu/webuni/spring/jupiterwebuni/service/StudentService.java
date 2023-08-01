@@ -5,7 +5,6 @@ import hu.webuni.spring.jupiterwebuni.model.student.Student;
 import hu.webuni.spring.jupiterwebuni.model.student.StudentMapper;
 import hu.webuni.spring.jupiterwebuni.repository.StudentRepository;
 import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

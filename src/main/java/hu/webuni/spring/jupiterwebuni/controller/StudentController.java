@@ -39,7 +39,7 @@ public class StudentController implements StudentControllerApi {
 
     @Override
     public ResponseEntity<List<StudentDto>> findAll1() {
-        return StudentControllerApi.super.findAll1();
+        return ResponseEntity.ok(studentService.findAll());
     }
 
     @Override
