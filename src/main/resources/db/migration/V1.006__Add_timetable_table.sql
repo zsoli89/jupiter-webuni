@@ -1,5 +1,5 @@
-create sequence special_day_seq start with 1 increment by 50;
-create sequence time_table_item_seq start with 1 increment by 50;
+create sequence if not exists  special_day_seq start with 1 increment by 50;
+create sequence if not exists  time_table_item_seq start with 1 increment by 50;
 
 create table special_day_aud (id int4 not null, rev int4 not null, revtype int2, source_day date, target_day date, primary key (id, rev));
 create table special_day (id int4 not null, source_day date, target_day date, primary key (id));

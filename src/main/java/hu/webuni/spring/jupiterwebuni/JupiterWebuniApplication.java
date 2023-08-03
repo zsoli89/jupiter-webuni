@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @RequiredArgsConstructor
 @EnableScheduling
 @EnableCaching
+@EnableAsync
 @SpringBootApplication
 public class JupiterWebuniApplication implements CommandLineRunner {
 

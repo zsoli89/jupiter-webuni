@@ -9,6 +9,7 @@ import hu.webuni.spring.jupiterwebuni.model.teacher.Teacher;
 import hu.webuni.spring.jupiterwebuni.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class InitDbService {
     private final JdbcTemplate jdbcTemplate;
     private final TimeTableItemRepository timeTableItemRepository;
     private final SpecialDayRepository specialDayRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void deleteDb() {
@@ -45,8 +47,10 @@ public class InitDbService {
         jdbcTemplate.update("DELETE FROM teacher_aud");
         jdbcTemplate.update("DELETE FROM course_aud");
         jdbcTemplate.update("DELETE FROM student_aud");
+
         jdbcTemplate.update("DELETE FROM course_students_aud");
         jdbcTemplate.update("DELETE FROM course_teachers_aud");
+        jdbcTemplate.update("DELETE FROM university_user_aud");
         jdbcTemplate.update("DELETE FROM revinfo");
     }
 
@@ -123,16 +127,12 @@ public class InitDbService {
     private Teacher createTeacher(String name, LocalDate birthDate) {
         return teacherRepository.save(
                 Teacher.builder()
-                        .name(name)
-                        .birthdate(birthDate)
                         .build());
     }
 
     private Student createStudent(String name, LocalDate birthdate, Long semester, Integer eduId) {
         return studentRepository.save(
                 Student.builder()
-                        .name(name)
-                        .birthdate(birthdate)
                         .semester(semester)
                         .eduId(eduId)
                         .build());
@@ -164,7 +164,8 @@ public class InitDbService {
                         .birthdate(birthdate)
                         .semester((long) semester)
                         .eduId(eduId)
-//                        .username(username)
+                        .username(username)
+                        .password(passwordEncoder.encode(pass))
                         .build());
     }
 
@@ -173,8 +174,8 @@ public class InitDbService {
                 Teacher.builder()
                         .name(name)
                         .birthdate(birthdate)
-//                        .username(username)
-//                        .password(passwordEncoder.encode(pass))
+                        .username(username)
+                        .password(passwordEncoder.encode(pass))
                         .build());
     }
 

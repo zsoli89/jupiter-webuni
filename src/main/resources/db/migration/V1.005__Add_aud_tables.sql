@@ -1,4 +1,4 @@
-create sequence revinfo_seq start with 1 increment by 50;
+create sequence if not exists  revinfo_seq start with 1 increment by 50;
 create table course_aud (id integer not null, rev integer not null, revtype smallint, name varchar(255), primary key (id, rev));
 create table course_students_aud (courses_id integer not null, rev integer not null, revtype smallint, students_id integer not null, primary key (courses_id, rev, students_id));
 create table course_teachers_aud (courses_id integer not null, rev integer not null, revtype smallint, teachers_id integer not null, primary key (courses_id, rev, teachers_id));

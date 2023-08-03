@@ -1,4 +1,4 @@
-create sequence course_seq start with 1 increment by 50;
+create sequence if not exists  course_seq start with 1 increment by 50;
 create table course (id bigint not null, name varchar(255), primary key (id));
 create table course_students (courses_id bigint not null, students_id bigint not null, primary key (courses_id, students_id));
 create table course_teachers (courses_id bigint not null, teachers_id bigint not null, primary key (courses_id, teachers_id));
