@@ -24,7 +24,7 @@ public class UniversityUserDetailsService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
-    @Transactional
+    @Transactional  // ez a course-teacher/student kapcsolatok miatt kell, lazy init exception miatt
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UniversityUser universityUser = userRepository.findByUsername(username)
@@ -40,7 +40,6 @@ public class UniversityUserDetailsService implements UserDetailsService {
         } else if (universityUser instanceof Student) {
             courses = ((Student) universityUser).getCourses();
         }
-//        return null;
         return new UserInfo(universityUser.getUsername(), universityUser.getPassword(),
                 Arrays.asList(new SimpleGrantedAuthority(universityUser.getUserType().toString())),
                 courses == null ? Collections.emptyList() :

@@ -30,7 +30,6 @@ public class JwtService {
                 .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(20)))
                 .withIssuer(issuer)
                 .sign(alg);
-
     }
 
     public UserDetails parseJwt(String jwtToken) {
@@ -44,7 +43,6 @@ public class JwtService {
                         .stream().map(SimpleGrantedAuthority::new).toList(),
                 decodedJwt.getClaim(COURSE_IDS).asList(Long.class)
         );
-
     }
 
 }
