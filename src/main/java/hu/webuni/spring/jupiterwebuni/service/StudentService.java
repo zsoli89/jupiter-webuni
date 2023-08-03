@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -108,6 +109,7 @@ public class StudentService {
                 if (eduId != null) {
                     int numFreeSemesters = centralEducationService.getNumFreeSemestersForStudent(eduId);
                     student.setNumFreeSemesters(numFreeSemesters);
+                    System.out.println("Free semesters of {%s}, number: {%s}".formatted(student.getName(), numFreeSemesters));
                     repository.save(student);
                 }
             } catch (Exception e) {
@@ -136,5 +138,10 @@ public class StudentService {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    @Transactional
+    public void updateBalance(int studentId, int amount) {
+        repository.findById((long) studentId).ifPresent(s -> s.setBalance(s.getBalance() + amount));
     }
 }

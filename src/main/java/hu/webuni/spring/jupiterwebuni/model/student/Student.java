@@ -32,6 +32,7 @@ public class Student {
     private Long semester;
     private Integer eduId;
     private Integer numFreeSemesters;
+    private int balance;
     @ManyToMany(mappedBy = "students")
     private Set<Course> courses;
 }

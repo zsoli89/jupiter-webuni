@@ -142,7 +142,32 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>0.2.2</version>
         </dependency>
-
+<!--    ezek kellenek a sun-os pluginhez, csak akkor tudja legeneralni, ha fut a masik project ahonnan behuzza    -->
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>4.0.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+        </dependency>
+<!--        ez ahhoz kell hogy feliratkozzunk a university-finance-ben levo topicra, a szerver nem kell ami ott benne van -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-artemis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -224,6 +249,28 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+<!--        ez kell a webservice kliens generalasahoz    -->
+<!--        ehhez kell a jaxws-rt dependency is, jakartas tipusokat fog generalni, amihez kell a jakarta.xml.ws-api dependency is    -->
+<!--        clean install utan, generated-sources wsimport alatt kellene lennie osztalyoknak, azt project structure-ban kell kiemelni, source-kent    -->
+            <plugin>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>4.0.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <packageName>hu.webuni.eduservice.wsclient</packageName>
+                    <wsdlUrls>
+                        <wsdlUrl>http://localhost:8081/services/student?wsdl</wsdlUrl>
+                    </wsdlUrls>
+                </configuration>
+
             </plugin>
         </plugins>
     </build>
