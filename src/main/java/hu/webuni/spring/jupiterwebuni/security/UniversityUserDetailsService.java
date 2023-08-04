@@ -42,7 +42,8 @@ public class UniversityUserDetailsService implements UserDetailsService {
         }
         return new UserInfo(universityUser.getUsername(), universityUser.getPassword(),
                 Arrays.asList(new SimpleGrantedAuthority(universityUser.getUserType().toString())),
-                courses == null ? Collections.emptyList() :
-                        courses.stream().map(Course::getId).toList());
+                courses == null
+                        ? Collections.emptyList()
+                        : courses.stream().map(Course::getId).toList());
     }
 }

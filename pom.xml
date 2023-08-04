@@ -99,12 +99,12 @@
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-hibernate-cache-v60</artifactId>
         </dependency>
-<!--        week 2-->
+        <!--        week 2-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-websocket</artifactId>
         </dependency>
-<!--    stomp-hoz kell -->
+        <!--    stomp-hoz kell -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-messaging</artifactId>
@@ -114,7 +114,7 @@
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-envers</artifactId>
         </dependency>
-<!--    metodus szintu cacheles-->
+        <!--    metodus szintu cacheles-->
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-hibernate-cache-v60</artifactId>
@@ -130,7 +130,7 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.1.0</version>
         </dependency>
-<!--    ez az api osztaly generalasahoz kell-->
+        <!--    ez az api osztaly generalasahoz kell-->
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
@@ -142,7 +142,7 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>0.2.2</version>
         </dependency>
-<!--    ezek kellenek a sun-os pluginhez, csak akkor tudja legeneralni, ha fut a masik project ahonnan behuzza    -->
+        <!--    ezek kellenek a sun-os pluginhez, csak akkor tudja legeneralni, ha fut a masik project ahonnan behuzza    -->
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
@@ -153,7 +153,7 @@
             <groupId>jakarta.xml.ws</groupId>
             <artifactId>jakarta.xml.ws-api</artifactId>
         </dependency>
-<!--        ez ahhoz kell hogy feliratkozzunk a university-finance-ben levo topicra, a szerver nem kell ami ott benne van -->
+        <!--        ez ahhoz kell hogy feliratkozzunk a university-finance-ben levo topicra, a szerver nem kell ami ott benne van -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-artemis</artifactId>
@@ -164,12 +164,12 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-<!--    6. het    -->
+        <!--    6. het    -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-<!--    ez kell a websocket securityhez    -->
+        <!--    ez kell a websocket securityhez    -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-messaging</artifactId>
@@ -178,6 +178,11 @@
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>4.4.0</version>
+        </dependency>
+<!--    kell a webclient hivas miatt    -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
     </dependencies>
 
@@ -233,7 +238,7 @@
                     </execution>
                 </executions>
             </plugin>
-<!--        week 2 -->
+            <!--        week 2 -->
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -261,9 +266,9 @@
                     </execution>
                 </executions>
             </plugin>
-<!--        ez kell a webservice kliens generalasahoz    -->
-<!--        ehhez kell a jaxws-rt dependency is, jakartas tipusokat fog generalni, amihez kell a jakarta.xml.ws-api dependency is    -->
-<!--        clean install utan, generated-sources wsimport alatt kellene lennie osztalyoknak, azt project structure-ban kell kiemelni, source-kent    -->
+            <!--        ez kell a webservice kliens generalasahoz    -->
+            <!--        ehhez kell a jaxws-rt dependency is, jakartas tipusokat fog generalni, amihez kell a jakarta.xml.ws-api dependency is    -->
+            <!--        clean install utan, generated-sources wsimport alatt kellene lennie osztalyoknak, azt project structure-ban kell kiemelni, source-kent    -->
             <plugin>
                 <groupId>com.sun.xml.ws</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
