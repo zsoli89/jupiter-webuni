@@ -49,11 +49,13 @@ public class SecurityConfig {
                                     .requestMatchers("/api/login/**").permitAll()
 //                                    websocket securityt utana kotjuk be
                                     .requestMatchers("/api/stomp/**").permitAll()
+//                                    webservicek-re beengedunk mindenkit /services
                                     .requestMatchers("/services").permitAll()
                                     .requestMatchers("/services/**").permitAll()
                                     .requestMatchers(HttpMethod.POST, "/api/courses/**").hasAuthority("TEACHER")
                                     .requestMatchers(HttpMethod.PUT, "/api/courses/**").hasAuthority("TEACHER")
-                                    .anyRequest().authenticated()
+                                    .anyRequest().permitAll()
+//                                    .anyRequest().authenticated()
                     )
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                     .build()

@@ -23,6 +23,9 @@ public class JwtLoginController {
     @Autowired
     FacebookLoginService facebookLoginService;
 
+    @Autowired
+    GoogleService googleLoginService;
+
 //    @Autowired
 //    GoogleLoginService googleLoginService;
 
@@ -33,39 +36,39 @@ public class JwtLoginController {
 //        return "\"" + jwtService.creatJwtToken((UserDetails) authentication.getPrincipal()) + "\"";
 //    }
 
-    @PostMapping("/api/login")
-    public String login(@RequestBody LoginDto loginDto) {
-        UserDetails userDetails = null;
-        String fbToken = loginDto.getFbToken();
-        if (ObjectUtils.isEmpty(fbToken)) {
-
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
-            userDetails = (UserDetails) authentication.getPrincipal();
-        } else {
-            userDetails = facebookLoginService.getUserDetailsForToken(fbToken);
-        }
-        return "\"" + jwtService.creatJwtToken(userDetails) + "\"";
-    }
-
 //    @PostMapping("/api/login")
 //    public String login(@RequestBody LoginDto loginDto) {
 //        UserDetails userDetails = null;
 //        String fbToken = loginDto.getFbToken();
-//        String googleToken = loginDto.getGoogleToken();
-//        if(ObjectUtils.isEmpty(fbToken)) {
+//        if (ObjectUtils.isEmpty(fbToken)) {
 //
-//            if(ObjectUtils.isEmpty(googleToken)) {
-//                Authentication authentication = authenticationManager.authenticate(
-//                        new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
-//                userDetails = (UserDetails) authentication.getPrincipal();
-//            } else {
-//                userDetails = googleLoginService.getUserDetailsForToken(googleToken);
-//            }
-//
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+//            userDetails = (UserDetails) authentication.getPrincipal();
 //        } else {
 //            userDetails = facebookLoginService.getUserDetailsForToken(fbToken);
 //        }
-//        return "\""+ jwtService.creatJwtToken(userDetails) + "\"";
+//        return "\"" + jwtService.creatJwtToken(userDetails) + "\"";
 //    }
+
+    @PostMapping("/api/login")
+    public String login(@RequestBody LoginDto loginDto) {
+        UserDetails userDetails = null;
+        String fbToken = loginDto.getFbToken();
+        String googleToken = loginDto.getGoogleToken();
+        if(ObjectUtils.isEmpty(fbToken)) {
+
+            if(ObjectUtils.isEmpty(googleToken)) {
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+                userDetails = (UserDetails) authentication.getPrincipal();
+            } else {
+                userDetails = googleLoginService.getUserDetailsForToken(googleToken);
+            }
+
+        } else {
+            userDetails = facebookLoginService.getUserDetailsForToken(fbToken);
+        }
+        return "\""+ jwtService.creatJwtToken(userDetails) + "\"";
+    }
 }
