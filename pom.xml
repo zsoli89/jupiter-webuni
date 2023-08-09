@@ -19,10 +19,7 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -95,10 +92,6 @@
             <classifier>jakarta</classifier>
         </dependency>
 
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-hibernate-cache-v60</artifactId>
-        </dependency>
         <!--        week 2-->
         <dependency>
             <groupId>org.springframework</groupId>

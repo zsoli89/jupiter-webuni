@@ -26,18 +26,21 @@ public class JmsConfig {
         return converter;
     }
 
+//    szeretnénk kettő különböző jms szerverhez kapcsolódni
+
+    @Bean
+    public ConnectionFactory financeConnectionFactory() {
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+        return connectionFactory;
+    }
+
+    //TODO: jms-serverben megoldani, hogy 61617-es porton induljon, és utána itt átírni a portot
 //    @Bean
-//    public ConnectionFactory financeConnectionFactory() {
-//        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-//        return connectionFactory;
-//    }
-//
-//    @Bean //TODO: jms-serverben megoldani, hogy 61617-es porton induljon, és utána itt átírni a portot
 //    public ConnectionFactory educationConnectionFactory() {
 //        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
 //        return connectionFactory;
 //    }
-//
+
 //    @Bean
 //    public JmsTemplate educationTemplate(ObjectMapper objectMapper) {
 //        JmsTemplate jmsTemplate = new JmsTemplate();
@@ -45,29 +48,32 @@ public class JmsConfig {
 //        jmsTemplate.setMessageConverter(jacksonJmsMessageConverter(objectMapper));
 //        return jmsTemplate;
 //    }
-//
-//    @Bean
-//    public JmsListenerContainerFactory<?> financeFactory(ConnectionFactory financeConnectionFactory,
-//                                                         DefaultJmsListenerContainerFactoryConfigurer configurer) {
-//
-//        return setPubSubAndDurableSubscription(financeConnectionFactory, configurer, "university-app");
-//    }
-//
-//
-//    private JmsListenerContainerFactory<?> setPubSubAndDurableSubscription(
-//            ConnectionFactory connectionFactory,
-//            DefaultJmsListenerContainerFactoryConfigurer configurer,
-//            String clientId) {
-//
-//        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-//        factory.setClientId(clientId);
-//        configurer.configure(factory, connectionFactory);
-//        factory.setPubSubDomain(true);
-//        factory.setSubscriptionDurable(true);
-//
-//        return factory;
-//    }
-//
+
+//    ezek azok a factory amik azokat az objektumokat menedzselik amikre jmsListener annotáciot tettem
+//    amikor a jmslistenerrel feliratkozom uzenetekre queuera vagy topicra meg kell mondanom hogy melyik
+//    jmslistenerContainerFactoryvel akarok dolgozni
+    @Bean
+    public JmsListenerContainerFactory<?> financeFactory(ConnectionFactory financeConnectionFactory,
+                                                         DefaultJmsListenerContainerFactoryConfigurer configurer) {
+
+        return setPubSubAndDurableSubscription(financeConnectionFactory, configurer, "university-app");
+    }
+
+
+    private JmsListenerContainerFactory<?> setPubSubAndDurableSubscription(
+            ConnectionFactory connectionFactory,
+            DefaultJmsListenerContainerFactoryConfigurer configurer,
+            String clientId) {
+
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        factory.setClientId(clientId);
+        configurer.configure(factory, connectionFactory);
+        factory.setPubSubDomain(true);
+        factory.setSubscriptionDurable(true);
+
+        return factory;
+    }
+
 //    @Bean
 //    public JmsListenerContainerFactory<?> educationFactory(ConnectionFactory educationConnectionFactory,
 //                                                           DefaultJmsListenerContainerFactoryConfigurer configurer) {

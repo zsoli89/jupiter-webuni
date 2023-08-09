@@ -97,7 +97,7 @@ public class StudentService {
         logger.info("Student deleted from repository by id {}", id);
     }
 
-//    @Scheduled(cron = "${jupiterwebuni.freeSemesterUpdater.cron}")
+    @Scheduled(cron = "${jupiterwebuni.freeSemesterUpdater.cron}")
     public void updateFreeSemesters() {
         List<Student> students = repository.findAll();
 
@@ -107,15 +107,24 @@ public class StudentService {
             try {
                 Integer eduId = student.getEduId();
                 if (eduId != null) {
-                    int numFreeSemesters = centralEducationService.getNumFreeSemestersForStudent(eduId);
-                    student.setNumFreeSemesters(numFreeSemesters);
-                    System.out.println("Free semesters of {%s}, number: {%s}".formatted(student.getName(), numFreeSemesters));
-                    repository.save(student);
+//                    1. verzió szinkron xml-ws hívás
+//                    int numFreeSemesters = centralEducationService.getNumFreeSemestersForStudent(eduId);
+//                    student.setNumFreeSemesters(numFreeSemesters);
+//                    System.out.println("Free semesters of {%s}, number: {%s}".formatted(student.getName(), numFreeSemesters));
+//                    repository.save(student);
+//                    2. verzió: aszinkron üzenetküldés
+//                    a válasz a jms package a FreeSemesterResponseConsumer kezeli
+                    centralEducationService.askNumFreeSemestersForStudent(eduId);
                 }
             } catch (Exception e) {
                 log.error("Error calling central education service.", e);
             }
         });
+    }
+
+    @Transactional
+    public void updateFreeSemesters(int eduId, int numFreeSemesters) {
+        repository.findByEduId(eduId).ifPresent(student -> student.setNumFreeSemesters(numFreeSemesters));
     }
 
     private Path getProfilePicPathForStudent(Integer id) {
